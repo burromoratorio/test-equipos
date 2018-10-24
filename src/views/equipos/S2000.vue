@@ -12,6 +12,9 @@
                 </b-button>
               </b-input-group-prepend>
               <b-form-input type="text" placeholder="EquipoID" v-model="equipo_id" name="equipo_id"></b-form-input>
+              <b-col cols="6" sm="4" md="2" xl class="mb-3 mb-xl-0">
+                <b-button block variant="outline-info" v-on:click="testEquipo(equipo_id)">Test</b-button>
+              </b-col>
             </b-input-group>
           </b-form-group>
       </b-form>
@@ -172,7 +175,13 @@ export default {
       //this.post=
       //this.equipo_id=equipo_id;
       this.fetchData(equipo_id);
-      console.log(equipo_id);
+      //console.log(equipo_id);
+    },
+    testEquipo(equipo_id){
+      dataservice.testEquipo({id:equipo_id}).then(()=>{
+        console.log("zaaaa"); 
+        //this.$router.push({ path: '../equipos/lista/'});
+      });
     }
   }
 }

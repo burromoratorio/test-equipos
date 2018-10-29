@@ -21,7 +21,7 @@
     </b-row>
     <b-row class="justify-content-center">
      <b-col sm="12" md="4">
-        <transition name="fade">
+        <transition name="fade" v-if="show">
           <b-card class="bg-secondary" no-body >
             <div slot="header">
               Card with header actions
@@ -62,18 +62,16 @@
 </template>
 
 <script>
-//import correntintable from '../../components/Correntintable.js'
-//import buttoncounter from '../../components/globalTable.js'
-//import correntintable from '../../components/CorrentinTable.vue'
 import Vue from 'vue';
 import DataService from '../../services/DataService';
 var comandos = [];
+var trs=[];
+var recargas=0; 
 var equipo_id = '7702';
 const dataservice = new DataService();
 
 export default {
   name: 's2000',
-  //components: {correntintable,buttoncounter},
   props: {
     caption: {
       type: String,
@@ -85,6 +83,8 @@ export default {
       loading: false,
       equipo_id: null,
       comandos:[],
+      trs:[],
+      recargas:0,
       fields: [
         {
           key : 'tr_id',
@@ -92,8 +92,7 @@ export default {
         },      
         {
           label: 'Usuario',
-          key : 'usuario',
-          sortable: true
+          key : 'usuario'
         },
         {
           key : 'estado',
@@ -101,13 +100,11 @@ export default {
         },
         {
           label: 'ComandoID',
-          key : 'cmd_id',
-          sortable: true
+          key : 'cmd_id'
         },
         {
           label: 'Valores',
-          key : 'auxiliar',
-          sortable: true
+          key : 'auxiliar'
         },
         {
           label: 'Comando',
@@ -116,8 +113,7 @@ export default {
         },
         {
           label: 'RTA',
-          key : 'respuesta',
-          sortable: true
+          key : 'respuesta'
         },
         
         {
@@ -132,35 +128,31 @@ export default {
         },
         {
           label: 'Estacion',
-          key : 'nombre_estacion',
-          sortable: true
+          key : 'nombre_estacion'
         }
       ],
       currentPage: 1,
-      perPage: 5,
-      totalRows: 0
+      perPage: 10,
+      totalRows: 0,
+      show: false,
     }
   },
-   created (equipo_id) {
-    // fetch the data when the view is created and the data is
-    // already being observed
-    this.fetchData(equipo_id)
-  },
+   created () {
+    },
   watch: {
     // call again the method if the route changes
     '$route': 'fetchData'
+   //this.search(equipo_id);
   },
   methods: {
     fetchData (equipo_id) {
-      this.loading = true;
+      this.show = true;
       dataservice.getComandos(equipo_id).then( result => {
-        console.log(result.data);
-        //sleep(500);
-        this.comandos = result.data;      
+        this.comandos = result.data; 
       }).then(()=>{
-        console.log("test");
-        //this.loading = false;
+       this.recargaConstante(this.comandos);
       });  
+      
     },
     getBadge (status) {
       return status === 'Active' ? 'success'
@@ -172,16 +164,58 @@ export default {
       return comandos.length
     },
     search(equipo_id){
-      //this.post=
-      //this.equipo_id=equipo_id;
       this.fetchData(equipo_id);
-      //console.log(equipo_id);
     },
     testEquipo(equipo_id){
       dataservice.testEquipo({id:equipo_id}).then(()=>{
-        console.log("zaaaa"); 
+        this.fetchData(equipo_id);
+        /*setTimeout(function run() {
+            console.log("d");
+            setTimeout(run, 1000);
+          }, 1000);*/
         //this.$router.push({ path: '../equipos/lista/'});
       });
+
+    },
+    recargaConstante(comandos){
+      var trs = [];
+      var sResp = 0;
+      comandos.map(myFunction);
+      function myFunction(item, index) {
+        if(!item.respuesta)sResp++
+        trs.push(item.tr_id);
+      }
+      this.recargas = sResp;
+      this.trs      = trs;
+      console.log(this.recargas);
+      //this.fetchData(this.trs);
+      /*if(this.recargas>0){
+          console.log("quedan : "+this.recargas+ " sin respuestas");
+          console.log(new Date());
+          this.trs.map(myFunction);
+          function myFunction(item, index) {
+            console.log(item);
+            
+          }
+          var i=0;
+          do {
+            i += 1;
+            console.log(i);
+            this.search(equipo_id);
+            sleep(150000) ;
+          } while (i < this.recargas);
+        }else{
+          console.log("no hay comandos no itero un choto");
+        }*/
+    }
+    
+  }
+}
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
     }
   }
 }

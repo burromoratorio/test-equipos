@@ -11,6 +11,10 @@ export default class DataService {
     const url = this.baseUrl+'comandos/'+equipo_id;
     return(axios.get(url));
   }
+  getAlarmas(equipo_id){
+    const url = this.baseUrl+'alarmas/'+equipo_id;
+    return(axios.get(url));
+  }
   testEquipo(equipo){
     const url = this.baseUrl+'comandos/test';
     console.log(equipo);
@@ -18,9 +22,10 @@ export default class DataService {
   }
   
 
-  createEquipo(lote, token){
-    const url = this.baseUrl+'equipos';
-    return(axios.post(url, lote, { 'headers': { 'Authorization': 'Bearer '+token } }));
+  finalizarTest(equipo){
+    const url = this.baseUrl+'test/finalizar/'+equipo;
+    return(axios.post(url,{ 'headers': { 'content-type': 'application/json' } }));
+
   }
   
 

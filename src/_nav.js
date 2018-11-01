@@ -10,8 +10,8 @@ export default {
       }
     },
     {
-      name: 'S2000',
-      url: '/S2000',
+      name: 'S3000',
+      url: '/S3000',
       icon: 'cui-map'
     }
   ]

@@ -13,7 +13,7 @@ const Typography = () => import('@/views/theme/Typography')
 const Charts = () => import('@/views/Charts')
 const Widgets = () => import('@/views/Widgets')
 
-const S2000   = () => import('@/views/equipos/S2000')
+const S3000   = () => import('@/views/equipos/S3000')
 const CorrentinTable   = () => import('@/components/CorrentinTable')
 // Views - Components
 const Cards = () => import('@/views/base/Cards')
@@ -69,7 +69,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/equipos/S2000',
+      redirect: '/equipos/S3000',
       name: 'Home',
       component: DefaultContainer,
       children: [
@@ -79,9 +79,9 @@ export default new Router({
           component: Dashboard
         },        
         {
-          path: '/equipos/S2000',
-          name: 'S2000',
-          component: S2000
+          path: '/equipos/S3000',
+          name: 'S3000',
+          component: S3000
         },    
        {
           path: '/Components/CorrentinTable',

@@ -4,7 +4,7 @@ import axios from 'axios';
 export default class DataService {
 
   constructor() {
-    this.baseUrl = 'http://code.siacseguridad.com/api/';
+    this.baseUrl = 'http://code.siacseguridad.com:8080/api/';
   }
   
   getComandos(equipo_id){

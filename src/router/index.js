@@ -13,7 +13,6 @@ const Typography = () => import('@/views/theme/Typography')
 const Charts = () => import('@/views/Charts')
 const Widgets = () => import('@/views/Widgets')
 
-const S3000   = () => import('@/views/equipos/S3000')
 const CorrentinTable   = () => import('@/components/CorrentinTable')
 // Views - Components
 const Cards = () => import('@/views/base/Cards')
@@ -60,6 +59,10 @@ const Register = () => import('@/views/pages/Register')
 const Users = () => import('@/views/users/Users')
 const User = () => import('@/views/users/User')
 
+//EQUIPOS
+const S3000   = () => import('@/views/equipos/S3000')
+const Anomalias   = () => import('@/views/equipos/Anomalias')
+
 Vue.use(Router)
 
 export default new Router({
@@ -82,12 +85,13 @@ export default new Router({
           path: '/equipos/S3000',
           name: 'S3000',
           component: S3000
+        }, 
+        {
+          path: '/equipos/Anomalias',
+          name: 'Anomalias',
+          component: Anomalias
         },    
-       {
-          path: '/Components/CorrentinTable',
-          name: 'CorrentinTable',
-          component: CorrentinTable
-        },
+       
         {
           path: 'theme',
           redirect: '/theme/colors',

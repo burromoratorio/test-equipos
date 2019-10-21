@@ -4,7 +4,7 @@ import axios from 'axios';
 export default class DataService {
 
   constructor() {
-    this.baseUrl = 'http://code.siacseguridad.com:8080/api/';
+    this.baseUrl = 'http://code.siacseguridad.com/api/';
   }
   
   getComandos(equipo_id){
@@ -27,6 +27,17 @@ export default class DataService {
     return(axios.post(url,{ 'headers': { 'content-type': 'application/json' } }));
 
   }
-  
+  getAnomalias(equipo_id){
+    var endpoint='anomalias'
+    if(equipo_id>0){
+      endpoint += '/'+equipo_id;
+    }
+    const url = this.baseUrl+endpoint;
+    return(axios.get(url));
+  }
+  resetearEquipo(movil_id){
+    const url = this.baseUrl+'anomalias/resetear/'+movil_id;
+    return(axios.post(url,{ 'headers': { 'content-type': 'application/json' } }));
+  }
 
 }

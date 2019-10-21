@@ -11,7 +11,12 @@ export default {
     },
     {
       name: 'S3000',
-      url: '/S3000',
+      url: '/equipos/S3000',
+      icon: 'cui-map'
+    },
+    {
+      name: 'Anomalias',
+      url: '/equipos/Anomalias',
       icon: 'cui-map'
     }
   ]

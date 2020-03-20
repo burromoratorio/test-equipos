@@ -155,7 +155,7 @@ export default {
         
       ],
       currentPage: 1,
-      perPage: 11,
+      perPage: 15,
       totalRows: 0,
       show: false,
       fieldsAlarm: [

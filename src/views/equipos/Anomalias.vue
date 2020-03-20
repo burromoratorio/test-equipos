@@ -112,7 +112,7 @@ export default {
       console.log("en reset");
       dataservice.resetearEquipo(this.movilReset).then( result => {
         if(result.status==200){
-          console.log(result.data);
+          this.fetchTotales (this.equipo_id);
         }
       })
 

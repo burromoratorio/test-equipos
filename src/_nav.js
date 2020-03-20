@@ -18,6 +18,11 @@ export default {
       name: 'Anomalias',
       url: '/equipos/Anomalias',
       icon: 'cui-map'
+    },
+    {
+      name: 'Menu',
+      url: '/comidas/MenuDiario',
+      icon: 'cui-map'
     }
   ]
 }

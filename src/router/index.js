@@ -62,6 +62,7 @@ const User = () => import('@/views/users/User')
 //EQUIPOS
 const S3000   = () => import('@/views/equipos/S3000')
 const Anomalias   = () => import('@/views/equipos/Anomalias')
+const MenuDiario   = () => import('@/views/comidas/menuDiario')
 
 Vue.use(Router)
 
@@ -91,7 +92,11 @@ export default new Router({
           name: 'Anomalias',
           component: Anomalias
         },    
-       
+       {
+          path: '/comidas/menuDiario',
+          name: 'MenuDiario',
+          component: MenuDiario
+        },    
         {
           path: 'theme',
           redirect: '/theme/colors',

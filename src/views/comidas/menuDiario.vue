@@ -4,10 +4,10 @@
       <div slot="header">
         <strong>Seleccion de menu</strong>  {{this.today}} 
         <div class="card-header-actions">
-          <b-dropdown text="Action" variant="primary" right>
-          <b-dropdown-item>Semana Actual</b-dropdown-item>
-          <b-dropdown-item>Semana Siguiente</b-dropdown-item>
-        </b-dropdown>
+          <b-dropdown text="Elegir Semana" variant="primary" right>
+            <b-dropdown-item>Semana Actual</b-dropdown-item>
+            <b-dropdown-item>Semana Siguiente</b-dropdown-item>
+          </b-dropdown>
         </div>
         
       </div>
@@ -43,10 +43,10 @@
           </blockquote>
         </b-card>
       </b-col>   
-    <b-col v-for="{comida_id,fecha,comida,checker} in xl"  :key="comida_id" sm="6" md="2">
+    <b-col v-for="{comida_id,fecha,comida,checker} in this.xl"  :key="comida_id" sm="6" md="2">
         <b-card class="card-accent-info" no-body v-if="show">
         <div slot="header" >
-        <c-switch class="mx-1" color="primary" checked :id="comida_id" v-model="checker" value="yes" uncheckedValue="no"/>
+          <c-switch class="mx-1 xl" color="primary" @change="actualizar" :id="comida_id" :value="checker" uncheckedValue="no"/>
         </div>
         <b-card-body>
         {{comida}}
@@ -126,6 +126,9 @@
   </b-row>
         </b-col>
       </b-row>
+      <div slot="footer">
+        <b-button block variant="success" @click="guardarPedidos">Guardar</b-button>
+      </div>
     </b-card>
   
   </div>
@@ -160,29 +163,29 @@ export default {
       loading: false,
       equipo_id: null,
       xl:[
-      { fecha: 'Lunes',comida: 'Samppa Nori', comida_id: '1',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Samppa Nori', comida_id:'2',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Samppa Nori', comida_id:'3',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Samppa Nori', comida_id:'4',checker: 'yes'},
-      { fecha: 'Martes',comida: 'Samppa Nori', comida_id:'8',checker: 'yes'}],
+      { fecha: 'Lunes',comida: 'Hamburguesas', comida_id: '1',checker: 'true'},
+      { fecha: 'Lunes',comida: 'Sorrentinos', comida_id:'2',checker: 'true'},
+      { fecha: 'Lunes',comida: 'Asado', comida_id:'3',checker: 'true'},
+      { fecha: 'Lunes',comida: 'Pizza', comida_id:'4',checker: 'true'},
+      { fecha: 'Martes',comida: 'Choripan', comida_id:'5',checker: 'true'}],
       regular:[
-      { fecha: 'Lunes',comida: 'Samppa Nori', comida_id: '1',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Samppa Nori', comida_id:'2',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Samppa Nori', comida_id:'3',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Samppa Nori', comida_id:'4',checker: 'yes'},
-      { fecha: 'Martes',comida: 'Samppa Nori', comida_id:'8',checker: 'yes'}],
+      { fecha: 'Lunes',comida: 'Tarta Jamon y Queso', comida_id: '6',checker: 'yes'},
+      { fecha: 'Lunes',comida: 'Rissoto', comida_id:'7',checker: 'yes'},
+      { fecha: 'Lunes',comida: 'Bife con Arroz', comida_id:'8',checker: 'yes'},
+      { fecha: 'Lunes',comida: 'Fideos con Crema', comida_id:'9',checker: 'yes'},
+      { fecha: 'Martes',comida: 'Empanadas', comida_id:'10',checker: 'yes'}],
       liviano:[
-      { fecha: 'Lunes',comida: 'Samppa Nori', comida_id: '1',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Samppa Nori', comida_id:'2',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Samppa Nori', comida_id:'3',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Samppa Nori', comida_id:'4',checker: 'yes'},
-      { fecha: 'Martes',comida: 'Samppa Nori', comida_id:'8',checker: 'yes'}],
+      { fecha: 'Lunes',comida: 'Pascualina', comida_id: '11',checker: 'yes'},
+      { fecha: 'Lunes',comida: 'Sopa', comida_id:'12',checker: 'yes'},
+      { fecha: 'Lunes',comida: 'Arroz al Wok', comida_id:'13',checker: 'yes'},
+      { fecha: 'Lunes',comida: 'Zapallitos Revueltos', comida_id:'14',checker: 'yes'},
+      { fecha: 'Martes',comida: 'Merluza con Ensalada', comida_id:'15',checker: 'yes'}],
       ensalada:[
-      { fecha: 'Lunes',comida: 'Samppa Nori', comida_id: '1',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Samppa Nori', comida_id:'2',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Samppa Nori', comida_id:'3',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Samppa Nori', comida_id:'4',checker: 'yes'},
-      { fecha: 'Martes',comida: 'Samppa Nori', comida_id:'8',checker: 'yes'}],
+      { fecha: 'Lunes',comida: 'Ensalada Mixta', comida_id: '16',checker: 'yes'},
+      { fecha: 'Lunes',comida: 'Ensalda Rusa', comida_id:'17',checker: 'yes'},
+      { fecha: 'Lunes',comida: 'Ensalda Caesar', comida_id:'18',checker: 'yes'},
+      { fecha: 'Lunes',comida: 'Ensalada vegana', comida_id:'19',checker: 'yes'},
+      { fecha: 'Martes',comida: 'Ensalada de Carne', comida_id:'20',checker: 'yes'}],
       
       togglePress: false,
       mensajito:'',
@@ -218,6 +221,15 @@ export default {
           this.mensajito= 'No se encontraron Datos';
         }
       }); 
+      
+    },
+    actualizar(ob){
+      alert(ob.checker);
+    },
+    guardarPedidos(){
+      for (var pedido in this.xl) {
+          alert(this.xl[pedido].comida+'--'+this.xl[pedido].checker);
+      }
       
     },
     getDate(){

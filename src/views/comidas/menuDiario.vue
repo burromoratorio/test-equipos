@@ -43,13 +43,16 @@
           </blockquote>
         </b-card>
       </b-col>   
-    <b-col v-for="{comida_id,fecha,comida,checker} in this.xl"  :key="comida_id" sm="6" md="2">
+    <b-col v-for="xl in this.xl"  :key="comida_id" sm="6" md="2">
         <b-card class="card-accent-info" no-body v-if="show">
         <div slot="header" >
-          <c-switch class="mx-1 xl" color="primary" @change="actualizar" :id="comida_id" :value="checker" uncheckedValue="no"/>
+          <input v-if='xl.checker=="yes"' checked type="checkbox" class="mx-1" :id="xl.comida_id" :value="xl" @change="actualizar($event)">
+          <!--<c-switch v-if='xl.checker=="yes"' checked class="mx-1" color="primary" @change="actualizar" :id="xl.comida_id" :value="xl" />-->
+          <input v-else type="checkbox" class="mx-1" :id="xl.comida_id" :value="xl" @change="actualizar($event)">
+          <!--<c-switch v-else class="mx-1" color="primary" @change="actualizar" :id="xl.comida_id" :value="xl" />-->
         </div>
         <b-card-body>
-        {{comida}}
+        {{xl.comida}}
         </b-card-body>
         </b-card>
     </b-col>      
@@ -143,7 +146,7 @@ var regular  = [];
 var liviano=[];
 var ensalada=[];
 var today = new Date();
-
+var pedidos=[];
 var mensajito ='';
 const dataservice = new DataService();
 
@@ -163,11 +166,11 @@ export default {
       loading: false,
       equipo_id: null,
       xl:[
-      { fecha: 'Lunes',comida: 'Hamburguesas', comida_id: '1',checker: 'true'},
-      { fecha: 'Lunes',comida: 'Sorrentinos', comida_id:'2',checker: 'true'},
-      { fecha: 'Lunes',comida: 'Asado', comida_id:'3',checker: 'true'},
-      { fecha: 'Lunes',comida: 'Pizza', comida_id:'4',checker: 'true'},
-      { fecha: 'Martes',comida: 'Choripan', comida_id:'5',checker: 'true'}],
+      { fecha: 'Lunes',comida: 'Hamburguesas', comida_id: '1',checker: 'yes'},
+      { fecha: 'Lunes',comida: 'Sorrentinos', comida_id:'2',checker: 'no'},
+      { fecha: 'Lunes',comida: 'Asado', comida_id:'3',checker: 'no'},
+      { fecha: 'Lunes',comida: 'Pizza', comida_id:'4',checker: 'yes'},
+      { fecha: 'Martes',comida: 'Choripan', comida_id:'5',checker: 'yes'}],
       regular:[
       { fecha: 'Lunes',comida: 'Tarta Jamon y Queso', comida_id: '6',checker: 'yes'},
       { fecha: 'Lunes',comida: 'Rissoto', comida_id:'7',checker: 'yes'},
@@ -186,7 +189,7 @@ export default {
       { fecha: 'Lunes',comida: 'Ensalda Caesar', comida_id:'18',checker: 'yes'},
       { fecha: 'Lunes',comida: 'Ensalada vegana', comida_id:'19',checker: 'yes'},
       { fecha: 'Martes',comida: 'Ensalada de Carne', comida_id:'20',checker: 'yes'}],
-      
+      pedidos:[],
       togglePress: false,
       mensajito:'',
       disabled:0,
@@ -223,12 +226,18 @@ export default {
       }); 
       
     },
-    actualizar(ob){
-      alert(ob.checker);
+    actualizar(evt){
+      if(evt){
+        alert(evt.comida+'--'+evt.checker);
+        this.pedidos.push(evt);
+      }else{
+        console.log(this);
+      }
+      
     },
     guardarPedidos(){
-      for (var pedido in this.xl) {
-          alert(this.xl[pedido].comida+'--'+this.xl[pedido].checker);
+      for (var pedido in this.pedidos) {
+          alert(this.pedidos[pedido].comida+'--'+this.pedidos[pedido].checker);
       }
       
     },

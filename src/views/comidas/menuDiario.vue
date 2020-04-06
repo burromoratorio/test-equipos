@@ -43,12 +43,12 @@
           </blockquote>
         </b-card>
       </b-col>   
-    <b-col v-for="xl in this.xl"  :key="comida_id" sm="6" md="2">
+    <b-col v-for="xl in this.xl" sm="6" md="2">
         <b-card class="card-accent-info" no-body v-if="show">
         <div slot="header" >
-          <input v-if='xl.checker=="yes"' checked type="checkbox" class="mx-1" :id="xl.comida_id" :value="xl" @change="actualizar($event)">
+          <input v-if='xl.checker=="yes"' v-model="pedidos" checked type="checkbox" class="mx-1" :id="xl.comida_id" :value="xl" @change="actualizar($event)">
+          <input v-else type="checkbox" v-model="pedidos" class="mx-1" :id="xl.comida_id" :value="xl" @change="actualizar($event)">
           <!--<c-switch v-if='xl.checker=="yes"' checked class="mx-1" color="primary" @change="actualizar" :id="xl.comida_id" :value="xl" />-->
-          <input v-else type="checkbox" class="mx-1" :id="xl.comida_id" :value="xl" @change="actualizar($event)">
           <!--<c-switch v-else class="mx-1" color="primary" @change="actualizar" :id="xl.comida_id" :value="xl" />-->
         </div>
         <b-card-body>
@@ -69,13 +69,15 @@
           </blockquote>
         </b-card>
       </b-col>   
-    <b-col v-for="{comida_id,fecha,comida,checker} in regular"  :key="comida_id" sm="6" md="2">
+    <b-col v-for="regular in this.regular"  :key="regular.comida_id" sm="6" md="2">
         <b-card class="card-accent-info" no-body v-if="show">
         <div slot="header" >
-        <c-switch class="mx-1" color="primary" checked :id="comida_id" v-model="checker" value="yes" uncheckedValue="no"/>
+          <input v-if='regular.checker=="yes"' v-model="pedidos" checked type="checkbox" class="mx-1" :id="regular.comida_id" :value="regular" @change="actualizar($event)">
+          <input v-else type="checkbox" v-model="pedidos" class="mx-1" :id="regular.comida_id" :value="regular" @change="actualizar($event)">
+        <!--<c-switch class="mx-1" color="primary" checked :id="comida_id" v-model="checker" value="yes" uncheckedValue="no"/>-->
         </div>
         <b-card-body>
-        {{comida}}
+        {{regular.comida}}
         </b-card-body>
         </b-card>
     </b-col>      
@@ -92,13 +94,15 @@
           </blockquote>
         </b-card>
       </b-col>   
-    <b-col v-for="{comida_id,fecha,comida,checker} in liviano"  :key="comida_id" sm="6" md="2">
+    <b-col v-for="liviano in this.liviano"  :key="liviano.comida_id" sm="6" md="2">
         <b-card class="card-accent-info" no-body v-if="show">
         <div slot="header" >
-        <c-switch class="mx-1" color="primary" checked :id="comida_id" v-model="checker" value="yes" uncheckedValue="no"/>
+          <input v-if='liviano.checker=="yes"' v-model="pedidos" checked type="checkbox" class="mx-1" :id="liviano.comida_id" :value="liviano" @change="actualizar($event)">
+          <input v-else type="checkbox" v-model="pedidos" class="mx-1" :id="liviano.comida_id" :value="liviano" @change="actualizar($event)">
+        <!--<c-switch class="mx-1" color="primary" checked :id="comida_id" v-model="checker" value="yes" uncheckedValue="no"/>-->
         </div>
         <b-card-body>
-        {{comida}}
+        {{liviano.comida}}
         </b-card-body>
         </b-card>
     </b-col>      
@@ -115,13 +119,15 @@
           </blockquote>
         </b-card>
       </b-col>   
-    <b-col v-for="{comida_id,fecha,comida,checker} in ensalada"  :key="comida_id" sm="6" md="2">
+    <b-col v-for="ensalada in this.ensalada"  :key="ensalada.comida_id" sm="6" md="2">
         <b-card class="card-accent-info" no-body v-if="show">
         <div slot="header" >
-        <c-switch class="mx-1" color="primary" checked :id="comida_id" v-model="checker" value="yes" uncheckedValue="no"/>
+          <input v-if='ensalada.checker=="yes"' v-model="pedidos" checked type="checkbox" class="mx-1" :id="ensalada.comida_id" :value="ensalada" @change="actualizar($event)">
+          <input v-else type="checkbox" v-model="pedidos" class="mx-1" :id="ensalada.comida_id" :value="ensalada" @change="actualizar($event)">
+        <!--<c-switch class="mx-1" color="primary" checked :id="comida_id" v-model="checker" value="yes" uncheckedValue="no"/>-->
         </div>
         <b-card-body>
-        {{comida}}
+        {{ensalada.comida}}
         </b-card-body>
         </b-card>
     </b-col>      
@@ -227,12 +233,15 @@ export default {
       
     },
     actualizar(evt){
+      console.log(evt);
+      /*evt.value
       if(evt){
         alert(evt.comida+'--'+evt.checker);
         this.pedidos.push(evt);
       }else{
-        console.log(this);
-      }
+        this.pedidos.push(evt);
+        
+      }*/
       
     },
     guardarPedidos(){

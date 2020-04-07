@@ -93,9 +93,9 @@ export default new Router({
           component: Anomalias
         },    
        {
-          path: '/comidas/menuDiario',
+          path: '/comidas/menuDiario/:id',
           name: 'MenuDiario',
-          component: MenuDiario
+          component: MenuDiario,
         },    
         {
           path: 'theme',

@@ -4,9 +4,9 @@
       <div slot="header">
         <strong>Seleccion de menu</strong>  {{this.today}} 
         <div class="card-header-actions">
-          <b-dropdown text="Elegir Semana" variant="primary" right>
-            <b-dropdown-item>Semana Actual</b-dropdown-item>
-            <b-dropdown-item>Semana Siguiente</b-dropdown-item>
+          <b-dropdown text="Elegir Semana" variant="primary" right >
+            <b-dropdown-item @click="cargaSelectores">Semana Actual</b-dropdown-item>
+            <b-dropdown-item @click="cargaSelectores">Semana Siguiente</b-dropdown-item>
           </b-dropdown>
         </div>
         
@@ -46,13 +46,23 @@
     <b-col v-for="xl in this.xl" sm="6" md="2">
         <b-card class="card-accent-info" no-body v-if="show">
         <div slot="header" >
-          <input v-if='xl.checker=="yes"' v-model="pedidos" checked type="checkbox" class="mx-1" :id="xl.comida_id" :value="xl" @change="actualizar($event)">
-          <input v-else type="checkbox" v-model="pedidos" class="mx-1" :id="xl.comida_id" :value="xl" @change="actualizar($event)">
-          <!--<c-switch v-if='xl.checker=="yes"' checked class="mx-1" color="primary" @change="actualizar" :id="xl.comida_id" :value="xl" />-->
+          <b-form-checkbox-group stacked id="basicCheckboxes" name="Checkboxes" :checked="pedidos">
+            <b-form-checkbox v-model="pedidos" :id="xl.comida_id" :value="xl"></b-form-checkbox>
+          </b-form-checkbox-group>
+         <!-- <div v-if="xl.checker==='yes'">
+            <input type="checkbox" checked v-model="pedidos" :id="xl.comida_id" :value="xl" @change="actualizar($event)">
+          </div>
+          <div v-else>
+           lalala
+          </div>
+          -->
+          <!--
+
+            <c-switch v-if='xl.checker=="yes"' checked class="mx-1" color="primary" @change="actualizar" :id="xl.comida_id" :value="xl" />-->
           <!--<c-switch v-else class="mx-1" color="primary" @change="actualizar" :id="xl.comida_id" :value="xl" />-->
         </div>
         <b-card-body>
-        {{xl.comida}}
+        {{xl.comida}}-{{xl.checker}}
         </b-card-body>
         </b-card>
     </b-col>      
@@ -73,7 +83,7 @@
         <b-card class="card-accent-info" no-body v-if="show">
         <div slot="header" >
           <input v-if='regular.checker=="yes"' v-model="pedidos" checked type="checkbox" class="mx-1" :id="regular.comida_id" :value="regular" @change="actualizar($event)">
-          <input v-else type="checkbox" v-model="pedidos" class="mx-1" :id="regular.comida_id" :value="regular" @change="actualizar($event)">
+          <input v-else type="checkbox" v-model="pedidos" class="mx-1" :id="regular.comida_id" :value="regular" >
         <!--<c-switch class="mx-1" color="primary" checked :id="comida_id" v-model="checker" value="yes" uncheckedValue="no"/>-->
         </div>
         <b-card-body>
@@ -202,8 +212,9 @@ export default {
       
     }
   },
-   created () {
-    },
+  created: function () {
+    // `this` hace referencia a la instancia vm
+  },
   watch: {
     // call again the method if the route changes
     '$route': 'fetchData'
@@ -232,9 +243,18 @@ export default {
       }); 
       
     },
+    cargaSelectores(){
+      for (var pedido in this.xl) {
+        if(this.xl[pedido].checker=='yes'){
+          this.pedidos.push(this.xl[pedido]);
+          alert("este");
+        }
+        
+      }
+    },
     actualizar(evt){
       console.log(evt);
-      /*evt.value
+     /*evt.value
       if(evt){
         alert(evt.comida+'--'+evt.checker);
         this.pedidos.push(evt);
@@ -245,6 +265,8 @@ export default {
       
     },
     guardarPedidos(){
+      var idEmpleado = this.$route.params.id;
+      alert(idEmpleado);
       for (var pedido in this.pedidos) {
           alert(this.pedidos[pedido].comida+'--'+this.pedidos[pedido].checker);
       }

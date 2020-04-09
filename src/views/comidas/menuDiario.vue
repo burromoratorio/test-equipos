@@ -5,8 +5,8 @@
         <strong>Seleccion de menu</strong>  {{this.today}} 
         <div class="card-header-actions">
           <b-dropdown text="Elegir Semana" variant="primary" right >
-            <b-dropdown-item @click="cargaSelectores">Semana Actual</b-dropdown-item>
-            <b-dropdown-item @click="cargaSelectores">Semana Siguiente</b-dropdown-item>
+            <b-dropdown-item @click="cargaSelectores($event)">Semana Actual</b-dropdown-item>
+            <b-dropdown-item @click="cargaSelectores($event)">Semana Siguiente</b-dropdown-item>
           </b-dropdown>
         </div>
         
@@ -43,10 +43,10 @@
           </blockquote>
         </b-card>
       </b-col>   
-    <b-col v-for="xl in this.xl" sm="6" md="2">
+    <b-col v-for="xl in this.xl" :key="xl.comida_id" sm="6" md="2">
         <b-card class="card-accent-info" no-body v-if="show">
         <div slot="header" >
-          <b-form-checkbox-group stacked id="basicCheckboxes" name="Checkboxes" :checked="pedidos">
+          <b-form-checkbox-group id="xlCheckboxes" name="Checkboxes" :checked="pedidos">
             <b-form-checkbox v-model="pedidos" :id="xl.comida_id" :value="xl"></b-form-checkbox>
           </b-form-checkbox-group>
          <!-- <div v-if="xl.checker==='yes'">
@@ -82,12 +82,12 @@
     <b-col v-for="regular in this.regular"  :key="regular.comida_id" sm="6" md="2">
         <b-card class="card-accent-info" no-body v-if="show">
         <div slot="header" >
-          <input v-if='regular.checker=="yes"' v-model="pedidos" checked type="checkbox" class="mx-1" :id="regular.comida_id" :value="regular" @change="actualizar($event)">
-          <input v-else type="checkbox" v-model="pedidos" class="mx-1" :id="regular.comida_id" :value="regular" >
-        <!--<c-switch class="mx-1" color="primary" checked :id="comida_id" v-model="checker" value="yes" uncheckedValue="no"/>-->
+          <b-form-checkbox-group id="regularCheckboxes" name="Checkboxes" :checked="pedidos">
+            <b-form-checkbox v-model="pedidos" :id="regular.comida_id" :value="regular"></b-form-checkbox>
+          </b-form-checkbox-group>
         </div>
         <b-card-body>
-        {{regular.comida}}
+        {{regular.comida}}-{{regular.checker}}
         </b-card-body>
         </b-card>
     </b-col>      
@@ -107,12 +107,12 @@
     <b-col v-for="liviano in this.liviano"  :key="liviano.comida_id" sm="6" md="2">
         <b-card class="card-accent-info" no-body v-if="show">
         <div slot="header" >
-          <input v-if='liviano.checker=="yes"' v-model="pedidos" checked type="checkbox" class="mx-1" :id="liviano.comida_id" :value="liviano" @change="actualizar($event)">
-          <input v-else type="checkbox" v-model="pedidos" class="mx-1" :id="liviano.comida_id" :value="liviano" @change="actualizar($event)">
-        <!--<c-switch class="mx-1" color="primary" checked :id="comida_id" v-model="checker" value="yes" uncheckedValue="no"/>-->
+          <b-form-checkbox-group id="livianoCheckboxes" name="Checkboxes" :checked="pedidos">
+            <b-form-checkbox v-model="pedidos" :id="liviano.comida_id" :value="liviano"></b-form-checkbox>
+          </b-form-checkbox-group>
         </div>
         <b-card-body>
-        {{liviano.comida}}
+        {{liviano.comida}}-{{liviano.checker}}
         </b-card-body>
         </b-card>
     </b-col>      
@@ -132,12 +132,12 @@
     <b-col v-for="ensalada in this.ensalada"  :key="ensalada.comida_id" sm="6" md="2">
         <b-card class="card-accent-info" no-body v-if="show">
         <div slot="header" >
-          <input v-if='ensalada.checker=="yes"' v-model="pedidos" checked type="checkbox" class="mx-1" :id="ensalada.comida_id" :value="ensalada" @change="actualizar($event)">
-          <input v-else type="checkbox" v-model="pedidos" class="mx-1" :id="ensalada.comida_id" :value="ensalada" @change="actualizar($event)">
-        <!--<c-switch class="mx-1" color="primary" checked :id="comida_id" v-model="checker" value="yes" uncheckedValue="no"/>-->
+         <b-form-checkbox-group id="ensaladaCheckboxes" name="Checkboxes" :checked="pedidos">
+            <b-form-checkbox v-model="pedidos" :id="ensalada.comida_id" :value="ensalada"></b-form-checkbox>
+          </b-form-checkbox-group>
         </div>
         <b-card-body>
-        {{ensalada.comida}}
+        {{ensalada.comida}}-{{ensalada.checker}}
         </b-card-body>
         </b-card>
     </b-col>      
@@ -157,6 +157,7 @@
 import Vue from 'vue';
 import { Switch as cSwitch } from '@coreui/vue'
 import DataService from '../../services/DataService';
+import Helpers from '../../services/Helpers';
 var xl = [];
 var regular  = [];
 var liviano=[];
@@ -165,7 +166,7 @@ var today = new Date();
 var pedidos=[];
 var mensajito ='';
 const dataservice = new DataService();
-
+const helpers = new Helpers();
 export default {
   name: 'menuDiario',
   components:{cSwitch},
@@ -178,33 +179,33 @@ export default {
   data () {
     return {
       show:true,
-      today : this.getDate(),
+      today : helpers.getDate(),
       loading: false,
       equipo_id: null,
       xl:[
       { fecha: 'Lunes',comida: 'Hamburguesas', comida_id: '1',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Sorrentinos', comida_id:'2',checker: 'no'},
-      { fecha: 'Lunes',comida: 'Asado', comida_id:'3',checker: 'no'},
-      { fecha: 'Lunes',comida: 'Pizza', comida_id:'4',checker: 'yes'},
-      { fecha: 'Martes',comida: 'Choripan', comida_id:'5',checker: 'yes'}],
+      { fecha: 'Martes',comida: 'Sorrentinos', comida_id:'2',checker: 'no'},
+      { fecha: 'Miercoles',comida: 'Asado', comida_id:'3',checker: 'no'},
+      { fecha: 'Jueves',comida: 'Pizza', comida_id:'4',checker: 'no'},
+      { fecha: 'Viernes',comida: 'Choripan', comida_id:'5',checker: 'no-body'}],
       regular:[
-      { fecha: 'Lunes',comida: 'Tarta Jamon y Queso', comida_id: '6',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Rissoto', comida_id:'7',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Bife con Arroz', comida_id:'8',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Fideos con Crema', comida_id:'9',checker: 'yes'},
-      { fecha: 'Martes',comida: 'Empanadas', comida_id:'10',checker: 'yes'}],
+      { fecha: 'Lunes',comida: 'Tarta Jamon y Queso', comida_id: '6',checker: 'no'},
+      { fecha: 'Martes',comida: 'Rissoto', comida_id:'7',checker: 'yes'},
+      { fecha: 'Miercoles',comida: 'Bife con Arroz', comida_id:'8',checker: 'no'},
+      { fecha: 'Jueves',comida: 'Fideos con Crema', comida_id:'9',checker: 'yes'},
+      { fecha: 'Viernes',comida: 'Empanadas', comida_id:'10',checker: 'yes'}],
       liviano:[
-      { fecha: 'Lunes',comida: 'Pascualina', comida_id: '11',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Sopa', comida_id:'12',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Arroz al Wok', comida_id:'13',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Zapallitos Revueltos', comida_id:'14',checker: 'yes'},
-      { fecha: 'Martes',comida: 'Merluza con Ensalada', comida_id:'15',checker: 'yes'}],
+      { fecha: 'Lunes',comida: 'Pascualina', comida_id: '11',checker: 'no'},
+      { fecha: 'Martes',comida: 'Sopa', comida_id:'12',checker: 'no'},
+      { fecha: 'Miercoles',comida: 'Arroz al Wok', comida_id:'13',checker: 'no'},
+      { fecha: 'Jueves',comida: 'Zapallitos Revueltos', comida_id:'14',checker: 'no'},
+      { fecha: 'Viernes',comida: 'Merluza con Ensalada', comida_id:'15',checker: 'no'}],
       ensalada:[
-      { fecha: 'Lunes',comida: 'Ensalada Mixta', comida_id: '16',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Ensalda Rusa', comida_id:'17',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Ensalda Caesar', comida_id:'18',checker: 'yes'},
-      { fecha: 'Lunes',comida: 'Ensalada vegana', comida_id:'19',checker: 'yes'},
-      { fecha: 'Martes',comida: 'Ensalada de Carne', comida_id:'20',checker: 'yes'}],
+      { fecha: 'Lunes',comida: 'Ensalada Mixta', comida_id: '16',checker: 'no'},
+      { fecha: 'Martes',comida: 'Ensalda Rusa', comida_id:'17',checker: 'no'},
+      { fecha: 'Miercoles',comida: 'Ensalda Caesar', comida_id:'18',checker: 'yes'},
+      { fecha: 'Jueves',comida: 'Ensalada vegana', comida_id:'19',checker: 'no'},
+      { fecha: 'Viernes',comida: 'Ensalada de Carne', comida_id:'20',checker: 'no'}],
       pedidos:[],
       togglePress: false,
       mensajito:'',
@@ -243,13 +244,32 @@ export default {
       }); 
       
     },
-    cargaSelectores(){
+    cargaSelectores($evt){
+      helpers.get_start_end_week()
+      helpers.get_next_week_start();
+      //xl
       for (var pedido in this.xl) {
         if(this.xl[pedido].checker=='yes'){
           this.pedidos.push(this.xl[pedido]);
-          alert("este");
         }
-        
+      }
+      //regular
+      for (var pedido in this.regular) {
+        if(this.regular[pedido].checker=='yes'){
+          this.pedidos.push(this.regular[pedido]);
+        }
+      }
+      //liviano
+      for (var pedido in this.liviano) {
+        if(this.liviano[pedido].checker=='yes'){
+          this.pedidos.push(this.liviano[pedido]);
+        }
+      }
+      //ensalada
+      for (var pedido in this.ensalada) {
+        if(this.ensalada[pedido].checker=='yes'){
+          this.pedidos.push(this.ensalada[pedido]);
+        }
       }
     },
     actualizar(evt){
@@ -271,15 +291,6 @@ export default {
           alert(this.pedidos[pedido].comida+'--'+this.pedidos[pedido].checker);
       }
       
-    },
-    getDate(){
-      var today = new Date();
-      var dd = String(today.getDate()).padStart(2, '0');
-      var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-      var yyyy = today.getFullYear();
-
-      today = dd + '/' + mm + '/' + yyyy;
-      return today;
     },
     fetchAlarmas (equipo_id) {
       this.show = true;

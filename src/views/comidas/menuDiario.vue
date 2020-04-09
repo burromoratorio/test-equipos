@@ -49,17 +49,6 @@
           <b-form-checkbox-group id="xlCheckboxes" name="Checkboxes" :checked="pedidos">
             <b-form-checkbox v-model="pedidos" :id="xl.comida_id" :value="xl"></b-form-checkbox>
           </b-form-checkbox-group>
-         <!-- <div v-if="xl.checker==='yes'">
-            <input type="checkbox" checked v-model="pedidos" :id="xl.comida_id" :value="xl" @change="actualizar($event)">
-          </div>
-          <div v-else>
-           lalala
-          </div>
-          -->
-          <!--
-
-            <c-switch v-if='xl.checker=="yes"' checked class="mx-1" color="primary" @change="actualizar" :id="xl.comida_id" :value="xl" />-->
-          <!--<c-switch v-else class="mx-1" color="primary" @change="actualizar" :id="xl.comida_id" :value="xl" />-->
         </div>
         <b-card-body>
         {{xl.comida}}-{{xl.checker}}
@@ -182,30 +171,10 @@ export default {
       today : helpers.getDate(),
       loading: false,
       equipo_id: null,
-      xl:[
-      { fecha: 'Lunes',comida: 'Hamburguesas', comida_id: '1',checker: 'yes'},
-      { fecha: 'Martes',comida: 'Sorrentinos', comida_id:'2',checker: 'no'},
-      { fecha: 'Miercoles',comida: 'Asado', comida_id:'3',checker: 'no'},
-      { fecha: 'Jueves',comida: 'Pizza', comida_id:'4',checker: 'no'},
-      { fecha: 'Viernes',comida: 'Choripan', comida_id:'5',checker: 'no-body'}],
-      regular:[
-      { fecha: 'Lunes',comida: 'Tarta Jamon y Queso', comida_id: '6',checker: 'no'},
-      { fecha: 'Martes',comida: 'Rissoto', comida_id:'7',checker: 'yes'},
-      { fecha: 'Miercoles',comida: 'Bife con Arroz', comida_id:'8',checker: 'no'},
-      { fecha: 'Jueves',comida: 'Fideos con Crema', comida_id:'9',checker: 'yes'},
-      { fecha: 'Viernes',comida: 'Empanadas', comida_id:'10',checker: 'yes'}],
-      liviano:[
-      { fecha: 'Lunes',comida: 'Pascualina', comida_id: '11',checker: 'no'},
-      { fecha: 'Martes',comida: 'Sopa', comida_id:'12',checker: 'no'},
-      { fecha: 'Miercoles',comida: 'Arroz al Wok', comida_id:'13',checker: 'no'},
-      { fecha: 'Jueves',comida: 'Zapallitos Revueltos', comida_id:'14',checker: 'no'},
-      { fecha: 'Viernes',comida: 'Merluza con Ensalada', comida_id:'15',checker: 'no'}],
-      ensalada:[
-      { fecha: 'Lunes',comida: 'Ensalada Mixta', comida_id: '16',checker: 'no'},
-      { fecha: 'Martes',comida: 'Ensalda Rusa', comida_id:'17',checker: 'no'},
-      { fecha: 'Miercoles',comida: 'Ensalda Caesar', comida_id:'18',checker: 'yes'},
-      { fecha: 'Jueves',comida: 'Ensalada vegana', comida_id:'19',checker: 'no'},
-      { fecha: 'Viernes',comida: 'Ensalada de Carne', comida_id:'20',checker: 'no'}],
+      xl:[],
+      regular:[],
+      liviano:[],
+      ensalada:[],
       pedidos:[],
       togglePress: false,
       mensajito:'',
@@ -222,31 +191,17 @@ export default {
    //this.search(equipo_id);
   },
   methods: {
-    fetchData (equipo_id) {
-      this.show = true;
-      dataservice.getComandos(equipo_id).then( result => {
-        if(result.tipo==200){
-          this.comandos = result.data; 
-          comandos=result.data;
-          console.log(result.tipo);
-        }
-      },
-      (error) => {
-        this.showAlert();
-        this.disabled=1;
-      }
-      ).then(()=>{
-        if(comandos.length>0){
-          this.mensajito= 'Test en equipo: '+ equipo_id+ ' en proceso...';
-        }else{
-          this.mensajito= 'No se encontraron Datos';
-        }
-      }); 
-      
+    fetchData (inicio,fin,usuario_id) {
+      this.xl = dataservice.getXl(inicio,fin,usuario_id);
+      this.regular = dataservice.getRegular(inicio,fin,usuario_id);
+      this.liviano = dataservice.getLiviano(inicio,fin,usuario_id);
+      this.ensalada = dataservice.getEnsalada(inicio,fin,usuario_id);
     },
     cargaSelectores($evt){
-      helpers.get_start_end_week()
-      helpers.get_next_week_start();
+      var inicioSemana = helpers.get_start_end_week()
+      var finalSemana  = helpers.get_next_week_start();
+      var idEmpleado = this.$route.params.id;
+      this.fetchData(inicioSemana,finalSemana,idEmpleado);
       //xl
       for (var pedido in this.xl) {
         if(this.xl[pedido].checker=='yes'){
@@ -285,8 +240,6 @@ export default {
       
     },
     guardarPedidos(){
-      var idEmpleado = this.$route.params.id;
-      alert(idEmpleado);
       for (var pedido in this.pedidos) {
           alert(this.pedidos[pedido].comida+'--'+this.pedidos[pedido].checker);
       }

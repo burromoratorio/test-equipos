@@ -5,8 +5,8 @@
         <strong>Seleccion de menu</strong>  {{this.today}} 
         <div class="card-header-actions">
           <b-dropdown text="Elegir Semana" variant="primary" right >
-            <b-dropdown-item @click="cargaSelectores($event)">Semana Actual</b-dropdown-item>
-            <b-dropdown-item @click="cargaSelectores($event)">Semana Siguiente</b-dropdown-item>
+            <b-dropdown-item @click="cargaSelectores('actual')">Semana Actual</b-dropdown-item>
+            <b-dropdown-item @click="cargaSelectores('siguiente')">Semana Siguiente</b-dropdown-item>
           </b-dropdown>
         </div>
         
@@ -151,7 +151,6 @@ var xl = [];
 var regular  = [];
 var liviano=[];
 var ensalada=[];
-var today = new Date();
 var pedidos=[];
 var mensajito ='';
 const dataservice = new DataService();
@@ -168,7 +167,7 @@ export default {
   data () {
     return {
       show:true,
-      today : helpers.getDate(),
+      today : helpers.formatDate(new Date(),'ddbb'),
       loading: false,
       equipo_id: null,
       xl:[],
@@ -197,11 +196,16 @@ export default {
       this.liviano = dataservice.getLiviano(inicio,fin,usuario_id);
       this.ensalada = dataservice.getEnsalada(inicio,fin,usuario_id);
     },
-    cargaSelectores($evt){
-      var inicioSemana = helpers.get_start_end_week()
-      var finalSemana  = helpers.get_next_week_start();
+    cargaSelectores(semana){
+      if(semana=='actual'){
+        var rango = helpers.get_start_end_week("hoy");
+      }
+      if(semana=='siguiente'){
+        var rango  = helpers.get_start_end_week("");
+      }
+      //var proxSemana  = helpers.get_next_week_start();
       var idEmpleado = this.$route.params.id;
-      this.fetchData(inicioSemana,finalSemana,idEmpleado);
+      this.fetchData(rango[0],rango[1],idEmpleado);
       //xl
       for (var pedido in this.xl) {
         if(this.xl[pedido].checker=='yes'){
@@ -229,15 +233,6 @@ export default {
     },
     actualizar(evt){
       console.log(evt);
-     /*evt.value
-      if(evt){
-        alert(evt.comida+'--'+evt.checker);
-        this.pedidos.push(evt);
-      }else{
-        this.pedidos.push(evt);
-        
-      }*/
-      
     },
     guardarPedidos(){
       for (var pedido in this.pedidos) {

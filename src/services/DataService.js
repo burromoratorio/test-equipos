@@ -6,7 +6,13 @@ export default class DataService {
   constructor() {
     this.baseUrl = 'http://code.siacseguridad.com:8080/api/';
   }
+  getMenu(tipo,usuario_id,inicio,fin){
+    const url = this.baseUrl+tipo+'/';
+    return(axios.post(url,{'usuario_id': usuario_id,'inicio':inicio,'fin': fin},
+                      { 'headers': { 'content-type': 'application/json' } }));
+  }
   getXl(inicio,fin,usuario_id){
+    const url = this.baseUrl+'xl/';
     var xl = [
                     { fecha: 'Lunes',comida: 'Hamburguesas', comida_id: '1',checker: 'yes'},
                     { fecha: 'Martes',comida: 'Sorrentinos', comida_id:'2',checker: 'no'},
@@ -14,8 +20,6 @@ export default class DataService {
                     { fecha: 'Jueves',comida: 'Pizza', comida_id:'4',checker: 'no'},
                     { fecha: 'Viernes',comida: 'Choripan', comida_id:'5',checker: 'no-body'}];
     return xl;
-    //const url = this.baseUrl+'comandos/'+equipo_id;
-    //return(axios.get(url));
   }
   getRegular(inicio,fin,usuario_id){
     var regular =[
@@ -44,17 +48,11 @@ export default class DataService {
       { fecha: 'Viernes',comida: 'Ensalada de Carne', comida_id:'20',checker: 'no'}]
     return ensalada;
   }
-  testEquipo(equipo){
-    const url = this.baseUrl+'comandos/test';
-    console.log(equipo);
-    return(axios.post(url,equipo,{ 'headers': { 'content-type': 'application/json' } }));
-  }
-  
-
-  finalizarTest(equipo){
-    const url = this.baseUrl+'test/finalizar/'+equipo;
-    return(axios.post(url,{ 'headers': { 'content-type': 'application/json' } }));
-
+  guardarPedido(usuario_id,comidas){
+    const url = this.baseUrl+'pedidos/guardar/'+usuario_id;
+    let arrOfObj =comidas;
+    axios.post(url,arrOfObj,{ 'headers': { 'content-type': 'application/json' } });
+    
   }
   getAnomalias(equipo_id){
     var endpoint='anomalias'

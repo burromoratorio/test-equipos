@@ -175,6 +175,7 @@ export default {
       liviano:[],
       ensalada:[],
       pedidos:[],
+      idEmpleado:0,
       togglePress: false,
       mensajito:'',
       disabled:0,
@@ -190,11 +191,16 @@ export default {
    //this.search(equipo_id);
   },
   methods: {
-    fetchData (inicio,fin,usuario_id) {
-      this.xl = dataservice.getXl(inicio,fin,usuario_id);
-      this.regular = dataservice.getRegular(inicio,fin,usuario_id);
-      this.liviano = dataservice.getLiviano(inicio,fin,usuario_id);
-      this.ensalada = dataservice.getEnsalada(inicio,fin,usuario_id);
+    fetchData (inicio,fin) {
+      /*se van a reemplazar por 
+      this.xl = dataservice.getMenu('xl',usuario_id,inicio,fin);
+      this.regular = dataservice.getMenu('regular',usuario_id,inicio,fin);//dataservice.getRegular(inicio,fin,usuario_id);
+      this.liviano = dataservice.getMenu('liviano',usuario_id,inicio,fin);
+      this.ensalada = dataservice.getMenu('ensalada',usuario_id,inicio,fin);*/
+      this.xl = dataservice.getXl(inicio,fin,this.idEmpleado);
+      this.regular = dataservice.getRegular(inicio,fin,this.idEmpleado);
+      this.liviano = dataservice.getLiviano(inicio,fin,this.idEmpleado);
+      this.ensalada = dataservice.getEnsalada(inicio,fin,this.idEmpleado);
     },
     cargaSelectores(semana){
       if(semana=='actual'){
@@ -204,8 +210,8 @@ export default {
         var rango  = helpers.get_start_end_week("");
       }
       //var proxSemana  = helpers.get_next_week_start();
-      var idEmpleado = this.$route.params.id;
-      this.fetchData(rango[0],rango[1],idEmpleado);
+      this.idEmpleado = this.$route.params.id;
+      this.fetchData(rango[0],rango[1]);
       //xl
       for (var pedido in this.xl) {
         if(this.xl[pedido].checker=='yes'){
@@ -235,9 +241,7 @@ export default {
       console.log(evt);
     },
     guardarPedidos(){
-      for (var pedido in this.pedidos) {
-          alert(this.pedidos[pedido].comida+'--'+this.pedidos[pedido].checker);
-      }
+      dataservice.guardarPedido(this.idEmpleado,this.pedidos);
       
     },
     fetchAlarmas (equipo_id) {
